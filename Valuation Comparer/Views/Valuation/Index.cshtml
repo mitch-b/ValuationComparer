@@ -1,0 +1,57 @@
+﻿@using Valuation_Comparer.Models
+@model ParcelSearchModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Valuation Comparison Search</h2>
+<div class="valuationForm">
+@using(@Html.BeginForm("Search", "Valuation")) {
+    <div class="property">
+        @Html.LabelFor(x => x.PIN)
+        @Html.EditorFor(x => x.PIN)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.HouseNo)
+        @Html.EditorFor(x => x.HouseNo)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.StreetDirection)
+        @Html.DropDownListFor(x => x.StreetDirection, ParcelSearchModel.StreetDirections)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.StreetName)
+        @Html.EditorFor(x => x.StreetName)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.Suffix)
+        @Html.DropDownListFor(x => x.Suffix, ParcelSearchModel.StreetSuffixes)
+    </div>
+    <div class="property">**
+        @Html.LabelFor(x => x.ZIP)
+        @Html.EditorFor(x => x.ZIP)
+    </div>
+    <div class="property">**
+        @Html.LabelFor(x => x.PropertyClass)
+        @Html.ListBoxFor(x => x.PropertyClass, ParcelSearchModel.PropertyTypes, "multiple='multiple'")
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.UpperLimit)
+        @Html.EditorFor(x => x.UpperLimit)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.LowerLimit)
+        @Html.EditorFor(x => x.LowerLimit)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.ValuationType)
+        @Html.DropDownListFor(x => x.ValuationType, ParcelSearchModel.ValueCategories)
+    </div>
+    <div class="property">
+        @Html.LabelFor(x => x.FilterBySubdivision)
+        @Html.CheckBoxFor(x => x.FilterBySubdivision)
+    </div>
+    <input type="submit" value="Search" />
+    }
+</div>

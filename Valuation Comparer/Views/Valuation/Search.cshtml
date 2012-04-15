@@ -1,0 +1,128 @@
+﻿@using Valuation_Comparer.Models
+@model List<ParcelModel>
+
+@section Scripts { 
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAqnesuW-GCm5ALcMR90JnPOUOyFlITp2Y&sensor=false"></script> 
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>@ViewBag.Rows results returned.</p>
+
+
+
+<!-- Google Maps -->
+
+<script type="text/javascript">
+
+    function initialize() {
+        var myOptions = {
+            center: new google.maps.LatLng(41.25917, -96.06),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var geocoder = new google.maps.Geocoder();
+        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        var markers = new Array();
+        var infowindow = new google.maps.InfoWindow();
+        var i = 0;
+        var latlong;
+        @foreach (var parcel in Model) { 
+        
+            <text>
+            var address = '@parcel.PropertyAddress' + ' Omaha, NE';
+            
+            geocoder.geocode( { 'address': address}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                markers[i] = new google.maps.Marker({
+                position: results[0].geometry.location,
+                title: '@parcel.PropertyAddress',
+                content: '@parcel.PropertyAddress',
+                map: map
+                });
+
+                google.maps.event.addListener(markers[i], 'click', (function(marker) {
+                   return function () {
+                      infowindow.setContent('@parcel.AssessorURL');
+                      infowindow.open(map, marker);
+                   };
+                })(markers[i]));
+              } else {
+              }
+            });
+
+            
+            i++;
+
+            </text>
+        }
+        
+    }
+    $(function () {
+        initialize();
+    });
+    </script>
+    <div id="map_canvas" style="width:400px;height:300px;"></div>
+    <br /><br />
+
+    <h3>ZIP Code @ViewBag.ZIP</h3>
+    <h4>Values below based on @ViewBag.ValuationType sq ft and pricing.</h4>
+
+    <p>Mean valuation: <b>@ViewBag.Mean</b></p>
+    <br />
+   
+   <table>
+    <tr>
+        <th>PIN</th>
+        <th>Address</th>
+        <th>Owner</th>
+        <th>Sq Ft</th>
+        <th>$/Sq Ft</th>
+        <th>Acres</th>
+        <th>Minimum</th>
+        <th>Maximum</th>
+        <th>Current Value</th>
+        <th>Calculation</th>
+    </tr>
+    @foreach (var parcel in Model) { 
+    
+        <tr>
+            <td>
+                <a href='@parcel.AssessorURL'> @parcel.PIN </a>
+            </td>
+            <td>
+                @parcel.PropertyAddress
+            </td>
+            <td>
+                @parcel.OwnerName
+            </td>
+            <td>
+                @parcel.SqFt
+            </td>
+            <td>
+                @parcel.DollarsPerSqFt
+            </td>
+            <td>
+                @parcel.Acres
+            </td>
+            <td>
+                @parcel.MinimumValue
+            </td>
+            <td>
+                @parcel.MaximumValue
+            </td>
+            <td>
+                @parcel.CurrentValue
+            </td>
+            <td>
+                +0.46%
+            </td>
+        </tr>
+    }
+   </table>
+
+   <br />
+   <br />
+   <img src="@ViewBag.ValuationByStreetChartSrc" alt="Valuation by Street" />
+
+
